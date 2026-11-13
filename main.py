@@ -75,10 +75,12 @@ def balance(state: State) -> Page:
         Page: containing a button to continue and text boxes for the inputs
     """
     return Page(state, [
-        "Separate reactants spaces",
+        "Separate reactants with spaces",
         TextBox("reactants"),
-        "Separate Products spaces",
+        "\n",
+        "Separate Products with spaces",
         TextBox("products"),
+        "\n",
         Button("Balance", "balance_equation"),
         Button("return", "index")
         ])
@@ -150,10 +152,12 @@ def find_value(state: State) -> Page:
         Page: a page with 2 textboxes and a button
     """
     return Page(state, [
-        "what mass",
+        "what mass in grams",
         TextBox("mass"),
+        "\n",
         "what compound",
         TextBox("compound"),
+        "\n",
         Button("Find", "find"),
         Button("return", "index")
         ])
@@ -228,10 +232,12 @@ def percent_yield(state: State) -> Page:
         Page: a page with 2 text boxes and a button
     """
     return Page(state, [
-        "what yield are you looking for",
+        "what compound's yield do you want?",
         TextBox("chemical"),
-        "what is the mass of the yield?",
+        "\n"
+        "what is the actual yield of this compound?",
         TextBox("mass"),
+        "\n",
         Button("calculate", "calculate_percent_yield"),
         Button("return", "index")
         ])
@@ -280,6 +286,7 @@ def error(state: State, reason: str) -> Page:
     """
     return Page(state, [
         reason,
+        "\n",
         Button("return", "index")
         ])
 start_server(State(
