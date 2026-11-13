@@ -1,4 +1,4 @@
-#github name: Chemical-Equation-Manipulator
+
 from bakery import assert_equal
 from chempy import balance_stoichiometry
 from chempy import Substance
@@ -38,6 +38,10 @@ def index(state: State) -> Page:
                  Button("find value", "find_value"),
                  Button("percent yield", "percent_yield")
                  ])
+assert_equal(
+    index(State([], [], "", [])).content[1],
+    ""
+)
 #part of the index
 def show_equation(state: State) -> str:
     """
@@ -84,6 +88,10 @@ def balance(state: State) -> Page:
         Button("Balance", "balance_equation"),
         Button("return", "index")
         ])
+assert_equal(
+    balance(State([], [], "", [])).content[0],
+    "Separate reactants with spaces"
+)
 #a check specifically for the balancing function
 def is_chemical(formula: str) -> bool:
     """
@@ -128,6 +136,14 @@ def balance_equation(state: State, products: str, reactants: str) -> Page:
         state.compound_reactant.append(Compound(chemical, coefficient))
     state.equation = show_equation(state)
     return index(state)
+assert_equal(
+    balance_equation(
+        State([], [], "", []),
+        "H2O",
+        "H2 O2"
+    ).state.equation,
+    "2 H2 +1 O2 ->2 H2O "
+)
 #for the find_value function        
 def get_molar_mass(chemical: str) -> float:
     """
@@ -161,7 +177,10 @@ def find_value(state: State) -> Page:
         Button("Find", "find"),
         Button("return", "index")
         ])
-
+assert_equal(
+    find_value(State([], [], "", [])).content[0],
+    "what mass in grams"
+)
 @route
 def find(state: State, mass: str, compound: str) -> Page:
     """
@@ -221,6 +240,19 @@ def find(state: State, mass: str, compound: str) -> Page:
         *final_list,
         Button("return", "index")
         ])
+assert_equal(
+    find(
+        State(
+            [Compound("H2", 2), Compound("O2", 1)],
+            [Compound("H2O", 2)],
+            "2 H2 +1 O2 ->2 H2O ",
+            []
+        ),
+        "18.015",
+        "H2O"
+    ).state.masses,
+    [2.016, 15.999, 18.015]
+)
 #percent yield functions
 @route
 def percent_yield(state: State) -> Page:
@@ -234,13 +266,17 @@ def percent_yield(state: State) -> Page:
     return Page(state, [
         "what compound's yield do you want?",
         TextBox("chemical"),
-        "\n"
+        "\n",
         "what is the actual yield of this compound?",
         TextBox("mass"),
         "\n",
         Button("calculate", "calculate_percent_yield"),
         Button("return", "index")
         ])
+assert_equal(
+    percent_yield(State([], [], "", [])).content[0],
+    "what compound's yield do you want?"
+)
 @route
 def calculate_percent_yield(state: State, chemical: str, mass: str) -> Page:
     """
@@ -274,6 +310,19 @@ def calculate_percent_yield(state: State, chemical: str, mass: str) -> Page:
         "\n",
         Button("return", "index"),
         ])
+assert_equal(
+    calculate_percent_yield(
+        State(
+            [Compound("H2", 2), Compound("O2", 1)],
+            [Compound("H2O", 2)],
+            "2 H2 +1 O2 ->2 H2O ",
+            [2.01588, 15.999, 18.015]
+        ),
+        "H2O",
+        "9.0075"
+    ).content[1],
+    "50.0"
+)
 #general error equation
 @route
 def error(state: State, reason: str) -> Page:
@@ -289,6 +338,10 @@ def error(state: State, reason: str) -> Page:
         "\n",
         Button("return", "index")
         ])
+assert_equal(
+    error(State([], [], "", []), "bad mass").content[0],
+    "bad mass"
+)
 start_server(State(
     [],
     [],
