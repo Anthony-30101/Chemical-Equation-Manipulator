@@ -32,6 +32,7 @@ def index(state: State) -> Page:
     """
     return Page(state,
                 [
+                 Header("Chemical Equation Manipulator"),
                  state.equation,
                  Button("balance equation", "balance"),
                  Button("find value", "find_value"),
